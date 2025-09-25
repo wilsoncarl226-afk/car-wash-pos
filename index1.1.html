@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Splash Car Wash - Professional Vehicle Care</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2196F3">
+  <style>
+    /* Base styles */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 20px;
+    }
+    
+    .screen {
+        display: none;
+    }
+    
+    .screen.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    h1, h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+    
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #2196F3;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card h3 {
+        margin: 0;
+        color: #555;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .card p {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 10px 0 0;
+        color: #2c3e50;
+    }
+    
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin: 30px 0;
+    }
+    
+    button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    button.primary {
+        background: linear-gradient(135deg, #2196F3, #1976D2);
+        color: white;
+        box-shadow: 0 2px 10px rgba(33, 150, 243, 0.3);
+    }
+    
+    button.primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+    }
+    
+    button.secondary {
+        background: #f8f9fa;
+        color: #495057;
+        border: 1px solid #dee2e6;
+    }
+    
+    button.secondary:hover {
+        background: #e9ecef;
+        transform: translateY(-1px);
+    }
+    
+    .summary {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #28a745;
+    }
+    
+    .form-row {
+        margin: 15px 0;
+    }
+    
+    input, select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        transition: border-color 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    input:focus, select:focus {
+        outline: none;
+        border-color: #2196F3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+    
+    .package-option, .employee-option {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px 0;
+        transition: all 0.2s ease;
+    }
+    
+    .package-option:hover, .employee-option:hover {
+        border-color: #2196F3;
+        transform: translateX(5px);
+    }
+    
+    .package-option.selected, .employee-option.selected {
+        border-color: #2196F3;
+        background: #f0f8ff;
+        box-shadow: 0 2px 10px rgba(33, 150, 243, 0.2);
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    
+    th, td {
+        padding: 12px;
+        border: 1px solid #e9ecef;
+        text-align: left;
+    }
+    
+    th {
+        background: linear-gradient(135deg, #2196F3, #1976D2);
+        color: white;
+        font-weight: 600;
+    }
+    
+    tfoot td {
+        font-weight: 700;
+        background: #f8f9fa;
+    }
+    
+    .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    
+    .note {
+        font-size: 13px;
+        color: #6c757d;
+    }
+    
+    /* Login screen specific styling */
+    #loginScreen {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: 50px auto;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .login-logo {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+    
+    .login-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+    
+    .login-subtitle {
+        font-size: 14px;
+        color: #666;
+    }
+    
+    /* Payment confirmation modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s;
+    }
+    
+    .modal {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal h3 {
+        margin-top: 0;
+        color: #2c3e50;
+    }
+    
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    
+    /* Receipt styling */
+    .receipt {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+        border-top: 4px solid #28a745;
+    }
+    
+    .receipt-header {
+        text-align: center;
+        border-bottom: 1px dashed #ddd;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .receipt-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .receipt-details div {
+        padding: 5px 0;
+    }
+    
+    .receipt-total {
+        font-weight: bold;
+        font-size: 18px;
+        text-align: center;
+        border-top: 1px dashed #ddd;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+    
+    /* Sync status indicator */
+    .sync-status {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    .sync-status.online {
+        background: #28a745;
+        color: white;
+    }
+    
+    .sync-status.offline {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .sync-status.syncing {
+        background: #ffc107;
+        color: #212529;
+    }
+    
+    /* Pending sync indicator */
+    .pending-sync {
+        background: #ffc107;
+        color: #212529;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 10px;
+        margin-left: 5px;
+    }
+
+    /* Error handling styles */
+    .error-notice {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 12px;
+        display: none;
+        z-index: 1000;
+    }
+
+    .error-notice.show {
+        display: block;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .container { padding: 15px; }
+        .card-grid { grid-template-columns: 1fr; gap: 15px; }
+        #loginScreen { margin: 20px; padding: 30px 20px; }
+        .quick-actions { grid-template-columns: 1fr; }
+        .receipt-details { grid-template-columns: 1fr; }
+        .sync-status { top: 5px; right: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sync Status Indicator -->
+  <div id="syncStatus" class="sync-status offline">Offline</div>
+
+  <!-- Error Notice -->
+  <div id="errorNotice" class="error-notice">
+    ⚠️ An error occurred, but the app is still running
+  </div>
+
+  <!-- Professional Header -->
+  <div style="background: rgba(255,255,255,0.95); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="font-size: 24px;">🚗</div>
+        <div>
+          <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">Splash Car Wash</div>
+          <div style="font-size: 12px; color: #666;">Professional Vehicle Care</div>
+        </div>
+      </div>
+      <div id="currentUserDisplay" style="font-size: 14px; color: #666; display: none;">
+        Welcome, <span id="usernameDisplay"></span>
+        <span id="pendingSyncCount" class="pending-sync" style="display: none;">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- LOGIN -->
+    <div id="loginScreen" class="screen active">
+      <div class="login-header">
+        <div class="login-logo">🚗</div>
+        <div class="login-title">Splash Car Wash</div>
+        <div class="login-subtitle">Professional Vehicle Care System</div>
+      </div>
+      <form id="loginForm">
+        <div class="form-row"><input id="username" placeholder="Username" required></div>
+        <div class="form-row"><input id="password" type="password" placeholder="Password" required></div>
+        <div class="form-row"><button class="primary" type="submit">Login to System</button></div>
+      </form>
+      <p id="loginError" class="note" style="color:red;text-align:center"></p>
+      <div class="note" style="text-align:center;margin-top:10px">Demo credentials: admin / admin123</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardScreen" class="screen">
+      <h1>🚗 Splash Car Wash - Dashboard</h1>
+      <div class="card-grid">
+        <div class="card"><h3>Total Washes (Today)</h3><p id="todayWashes">0</p></div>
+        <div class="card"><h3>Revenue (Today)</h3><p id="todayRevenue">KSH 0</p></div>
+        <div class="card"><h3>Customers (Today)</h3><p id="todayCustomers">0</p></div>
+        <div class="card"><h3>Avg / Wash</h3><p id="todayAvg">KSH 0</p></div>
+      </div>
+      <div class="quick-actions">
+        <button class="primary" onclick="showScreen('registrationScreen')">🚗 New Wash</button>
+        <button class="primary" onclick="showScreen('reportsScreen')">📊 Reports</button>
+        <button class="secondary" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- REGISTRATION -->
+    <div id="registrationScreen" class="screen">
+      <h2>🚗 Vehicle Registration</h2>
+      <div class="summary">
+        <form id="registrationForm">
+          <div class="form-row"><input id="licensePlate" placeholder="License Plate (e.g. KCD 123A)" required></div>
+          <div class="form-row"><input id="customerName" placeholder="Customer Name (optional)"></div>
+          <div class="form-row"><select id="vehicleType" required><option value="">Select Vehicle Type</option><option>Sedan</option><option>SUV</option><option>Truck</option><option>Motorcycle</option></select></div>
+          <div class="form-row"><input id="phoneNumber" placeholder="Phone Number (e.g. 0712345678)" required></div>
+          <div class="form-row"><button class="primary" type="submit">Next → Select Package</button></div>
+        </form>
+      </div>
+      <div><button class="secondary" onclick="showScreen('dashboardScreen')">← Back</button></div>
+    </div>
+
+    <!-- PACKAGE -->
+    <div id="packageScreen" class="screen">
+      <h2>📦 Select Wash Package</h2>
+      <div class="summary">
+        <p>Vehicle: <strong id="packageVehiclePlate"></strong> | Type: <strong id="packageVehicleType"></strong></p>
+        <p>Customer: <strong id="packageCustomerName"></strong></p>
+      </div>
+      <div id="packageOptions"></div>
+      <div style="margin-top:10px">
+        <button class="secondary" onclick="showScreen('registrationScreen')">← Back</button>
+      </div>
+    </div>
+
+    <!-- EMPLOYEE -->
+    <div id="employeeScreen" class="screen">
+      <h2>👷 Assign Washer</h2>
+      <div class="summary">
+        <p>Package: <strong id="employeePackageName"></strong> | Price: <strong id="employeePackagePrice"></strong></p>
+      </div>
+      <div id="employeeOptions"></div>
+      <div style="margin-top:10px">
+        <button class="secondary" onclick="showScreen('packageScreen')">← Back</button>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div id="paymentScreen" class="screen">
+      <h2>💰 Payment</h2>
+      <div class="summary">
+        <p>Vehicle: <strong id="summaryPlate"></strong></p>
+        <p>Package: <strong id="summaryPackage"></strong></p>
+        <p>Washer: <strong id="summaryWasher"></strong></p>
+        <p>Total: <strong id="summaryAmount"></strong></p>
+      </div>
+      <div class="actions">
+        <button class="primary" onclick="showPaymentConfirmation('Cash')">💵 Cash</button>
+        <button class="primary" onclick="showPaymentConfirmation('Card')">💳 Card</button>
+        <button class="primary" onclick="showPaymentConfirmation('">📱 M-Pesa</button>
+      </div>
+      <div style="margin-top:10px"><button class="secondary" onclick="showScreen('employeeScreen')">← Back</button></div>
+    </div>
+
+    <!-- COMPLETION -->
+    <div id="completionScreen" class="screen">
+      <h2>✅ Wash Completed!</h2>
+      <div class="receipt">
+        <div class="receipt-header">
+          <h3>Splash Car Wash</h3>
+          <p>Professional Vehicle Care</p>
+          <p>Receipt #<span id="receiptId"></span></p>
+        </div>
+        <div class="receipt-details">
+          <div>Date:</div><div id="receiptDate"></div>
+          <div>Vehicle:</div><div id="receiptPlate"></div>
+          <div>Customer:</div><div id="receiptCustomer"></div>
+          <div>Package:</div><div id="receiptPackage"></div>
+          <div>Washer:</div><div id="receiptWasher"></div>
+          <div>Payment Method:</div><div id="receiptPaymentMethod"></div>
+        </div>
+        <div class="receipt-total">
+          Total: <span id="receiptAmount"></span>
+        </div>
+        <p style="text-align: center; font-size: 12px; margin-top: 15px;">Thank you for your business!</p>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+        <button class="primary" onclick="printReceipt()">🖨️ Print Receipt</button>
+        <button class="primary" onclick="startNewWash()">🚗 Start New Wash</button>
+        <button class="secondary" onclick="showScreen('dashboardScreen')">📊 Dashboard</button>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="reportsScreen" class="screen">
+      <h2>📊 Completed Washes Report</h2>
+      <div class="filters" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+        <div><label>Start Date</label><input id="reportStart" type="date"></div>
+        <div><label>End Date</label><input id="reportEnd" type="date"></div>
+        <div><label>Washer</label><select id="reportWasher"><option value="">All</option></select></div>
+        <div><label>Package</label><select id="reportPackage"><option value="">All</option></select></div>
+      </div>
+      <div class="actions">
+        <button class="primary" onclick="generateReport()">Generate Report</button>
+        <button class="secondary" onclick="exportCSV()">Export CSV</button>
+      </div>
+      <table id="reportTable"><thead><tr><th>Plate</th><th>Customer</th><th>Package</th><th>Amount</th><th>Washer</th><th>Date</th><th>Payment</th></tr></thead><tbody></tbody>
+      <tfoot><tr class="totals"><td colspan="2">Totals</td><td id="reportCount">0 Washes</td><td id="reportRevenue">KSH 0</td><td colspan="3"></td></tr></tfoot></table>
+      <div style="margin-top:10px"><button class="secondary" onclick="showScreen('dashboardScreen')">← Back</button></div>
+    </div>
+
+  </div>
+
+  <!-- Payment Confirmation Modal -->
+  <div id="paymentConfirmationModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h3>Confirm Payment</h3>
+      <p>Please confirm the payment details:</p>
+      <div class="summary">
+        <p>Vehicle: <strong id="confirmPlate"></strong></p>
+        <p>Package: <strong id="confirmPackage"></strong></p>
+        <p>Amount: <strong id="confirmAmount"></strong></p>
+        <p>Payment Method: <strong id="confirmMethod"></strong></p>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" onclick="hidePaymentConfirmation()">Cancel</button>
+        <button class="primary" id="confirmPaymentBtn">Confirm Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced error handling wrapper
+    function safeExecute(fn, context = 'Unknown') {
+      try {
+        return fn();
+      } catch (error) {
+        console.error(`Error in ${context}:`, error);
+        showErrorNotice(`Error in ${context}`);
+        return null;
+      }
+    }
+
+    function showErrorNotice(message) {
+      const errorNotice = document.getElementById('errorNotice');
+      if (errorNotice) {
+        errorNotice.textContent = `⚠️ ${message}`;
+        errorNotice.classList.add('show');
+        setTimeout(() => {
+          errorNotice.classList.remove('show');
+        }, 3000);
+      }
+    }
+
+    // Global variables with safe initialization
+    let currentUser = null;
+    let currentWash = {};
+    let pendingPaymentMethod = null;
+    let isOnline = navigator.onLine;
+    let pendingSyncCount = 0;
+    
+    // Core data and defaults
+    const washPackages = {
+      'basic': { name: 'Basic Wash', price: 200, points: 1 },
+      'exterior': { name: 'Exterior Wash', price: 100, points: 1 },
+      'engine': { name: 'Engine and Body Wash', price: 400, points: 2 },
+      'vacuum': { name: 'Vacuum Clean/Air Compressor', price: 150, points: 1 },
+      'detailing': { name: 'Detailing', price: 3000, points: 5 }
+    };
+    
+    const employees = ['John', 'Jeremy', 'Allan', 'Stephen', 'Alvin', 'Kelvin'];
+    
+    // User credentials (in a real app, this would be server-side)
+    const users = {
+      'admin': { password: 'admin123', role: 'admin' },
+      'manager': { password: 'manager123', role: 'manager' },
+      'operator': { password: 'operator123', role: 'operator' }
+    };
+    
+    // Service Worker Registration for Background Sync
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        safeExecute(() => {
+          navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        }, 'Service Worker Registration');
+      });
+    }
+    
+    // Update sync status indicator with error handling
+    function updateSyncStatus() {
+      safeExecute(() => {
+        const statusElement = document.getElementById('syncStatus');
+        const pendingElement = document.getElementById('pendingSyncCount');
+        
+        if (!statusElement) return;
+        
+        if (isOnline) {
+          statusElement.textContent = 'Online';
+          statusElement.className = 'sync-status online';
+        } else {
+          statusElement.textContent = 'Offline';
+          statusElement.className = 'sync-status offline';
+        }
+        
+        if (pendingElement && pendingSyncCount > 0) {
+          pendingElement.textContent = pendingSyncCount;
+          pendingElement.style.display = 'inline';
+          statusElement.textContent += ' (Syncing)';
+          statusElement.className = 'sync-status syncing';
+        } else if (pendingElement) {
+          pendingElement.style.display = 'none';
+        }
+      }, 'Update Sync Status');
+    }
+    
+    // Check network status and update UI
+    function updateOnlineStatus() {
+      safeExecute(() => {
+        isOnline = navigator.onLine;
+        updateSyncStatus();
+        
+        if (isOnline) {
+          // Try to sync pending records when coming online
+          syncPendingRecords();
+        }
+      }, 'Update Online Status');
+    }
+    
+    // Listen for network status changes
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    
+    // Initialize sync status
+    updateOnlineStatus();
+    
+    // Sync pending records with server
+    async function syncPendingRecords() {
+      return safeExecute(async () => {
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        
+        if (pendingRecords.length === 0) return;
+        
+        pendingSyncCount = pendingRecords.length;
+        updateSyncStatus();
+        
+        // In a real implementation, this would send data to your server
+        // For this demo, we'll simulate the sync process
+        try {
+          // Simulate API calls with delays
+          for (let i = 0; i < pendingRecords.length; i++) {
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // In a real app, you would send the record to your server here
+            console.log('Syncing record:', pendingRecords[i]);
+          }
+          
+          // After successful sync, remove pending records
+          localStorage.removeItem('pendingSyncRecords');
+          pendingSyncCount = 0;
+          updateSyncStatus();
+          
+          // Update dashboard to reflect synced data
+          updateDashboard();
+          
+          console.log('All pending records synced successfully');
+        } catch (error) {
+          console.error('Error syncing records:', error);
+          showErrorNotice('Sync failed, will retry later');
+          // Keep records as pending for next sync attempt
+        }
+      }, 'Sync Pending Records');
+    }
+    
+    // Add record to pending sync queue
+    function addToPendingSync(record) {
+      safeExecute(() => {
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        pendingRecords.push(record);
+        localStorage.setItem('pendingSyncRecords', JSON.stringify(pendingRecords));
+        
+        pendingSyncCount = pendingRecords.length;
+        updateSyncStatus();
+        
+        // If online, try to sync immediately
+        if (isOnline) {
+          syncPendingRecords();
+        }
+      }, 'Add to Pending Sync');
+    }
+    
+    // Global functions accessible from HTML with error handling
+    function showScreen(id) {
+      safeExecute(() => {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const targetScreen = document.getElementById(id);
+        if (targetScreen) {
+          targetScreen.classList.add('active');
+        }
+        
+        if (id === 'dashboardScreen') {
+          updateDashboard();
+        }
+        if (id === 'reportsScreen') {
+          prepareReportFilters();
+        }
+        if (id === 'packageScreen') {
+          populatePackageOptions();
+        }
+      }, 'Show Screen');
+    }
+    
+    function logout() {
+      safeExecute(() => {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateUserDisplay();
+        showScreen('loginScreen');
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) loginForm.reset();
+      }, 'Logout');
+    }
+    
+    function startNewWash() {
+      safeExecute(() => {
+        currentWash = {};
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) registrationForm.reset();
+        showScreen('registrationScreen');
+      }, 'Start New Wash');
+    }
+    
+    function printReceipt() {
+      safeExecute(() => {
+        const receiptContent = document.querySelector('.receipt');
+        if (!receiptContent) return;
+        
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          showErrorNotice('Popup blocked - please allow popups for printing');
+          return;
+        }
+        
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Receipt - Splash Car Wash</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                .receipt { border: 1px solid #000; padding: 20px; max-width: 400px; margin: 0 auto; }
+                .receipt-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 15px; margin-bottom: 15px; }
+                .receipt-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+                .receipt-total { font-weight: bold; font-size: 18px; text-align: center; border-top: 1px dashed #000; padding-top: 15px; margin-top: 15px; }
+              </style>
+            </head>
+            <body>
+              <div class="receipt">${receiptContent.innerHTML}</div>
+              <script>window.print();<\/script>
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      }, 'Print Receipt');
+    }
+    
+    function showPaymentConfirmation(method) {
+      safeExecute(() => {
+        pendingPaymentMethod = method;
+        
+        // Populate confirmation modal
+        const elements = {
+          confirmPlate: document.getElementById('confirmPlate'),
+          confirmPackage: document.getElementById('confirmPackage'),
+          confirmAmount: document.getElementById('confirmAmount'),
+          confirmMethod: document.getElementById('confirmMethod')
+        };
+        
+        if (elements.confirmPlate) elements.confirmPlate.textContent = currentWash.licensePlate || '';
+        if (elements.confirmPackage) elements.confirmPackage.textContent = currentWash.package || '';
+        if (elements.confirmAmount) elements.confirmAmount.textContent = 'KSH ' + (currentWash.price || 0);
+        if (elements.confirmMethod) elements.confirmMethod.textContent = method;
+        
+        // Set up confirmation button
+        const confirmBtn = document.getElementById('confirmPaymentBtn');
+        if (confirmBtn) {
+          confirmBtn.onclick = function() {
+            processPayment(method);
+            hidePaymentConfirmation();
+          };
+        }
+        
+        // Show modal
+        const modal = document.getElementById('paymentConfirmationModal');
+        if (modal) modal.style.display = 'flex';
+      }, 'Show Payment Confirmation');
+    }
+    
+    function hidePaymentConfirmation() {
+      safeExecute(() => {
+        const modal = document.getElementById('paymentConfirmationModal');
+        if (modal) modal.style.display = 'none';
+        pendingPaymentMethod = null;
+      }, 'Hide Payment Confirmation');
+    }
+    
+    function generateReport() {
+      safeExecute(() => {
+        const washRecords = JSON.parse(localStorage.getItem('washRecords') || '[]');
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        
+        // Combine completed records with pending records for reporting
+        const allRecords = [...washRecords, ...pendingRecords];
+        
+        const start = document.getElementById('reportStart')?.value || '';
+        const end = document.getElementById('reportEnd')?.value || '';
+        const washer = document.getElementById('reportWasher')?.value || '';
+        const pkg = document.getElementById('reportPackage')?.value || '';
+        
+        let filtered = allRecords.filter(r => r.status === 'completed');
+        if (start) { 
+          filtered = filtered.filter(r => new Date(r.timestamp) >= new Date(start)); 
+        }
+        if (end) { 
+          let e = new Date(end); 
+          e.setHours(23, 59, 59, 999); 
+          filtered = filtered.filter(r => new Date(r.timestamp) <= e); 
+        }
+        if (washer) filtered = filtered.filter(r => r.employee === washer);
+        if (pkg) filtered = filtered.filter(r => r.package === pkg);
+        
+        const tbody = document.querySelector('#reportTable tbody'); 
+        if (tbody) {
+          tbody.innerHTML = '';
+          
+          let total = 0;
+          filtered.forEach(r => {
+            const tr = document.createElement('tr');
+            const syncIndicator = pendingRecords.some(pr => pr.id === r.id) ? ' ⏳' : '';
+            tr.innerHTML = `<td>${r.licensePlate || ''}</td><td>${r.customerName || ''}</td><td>${r.package || ''}${syncIndicator}</td><td>KSH ${r.finalPrice || 0}</td><td>${r.employee || ''}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td>${r.paymentMethod || ''}</td>`;
+            tbody.appendChild(tr);
+            total += r.finalPrice || 0;
+          });
+          
+          const countElement = document.getElementById('reportCount');
+          const revenueElement = document.getElementById('reportRevenue');
+          if (countElement) countElement.textContent = filtered.length + ' Washes';
+          if (revenueElement) revenueElement.textContent = 'KSH ' + total;
+        }
+      }, 'Generate Report');
+    }
+    
+    function exportCSV() {
+      safeExecute(() => {
+        const washRecords = JSON.parse(localStorage.getItem('washRecords') || '[]');
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        const allRecords = [...washRecords, ...pendingRecords];
+        
+        const rows = [['Plate', 'Customer', 'Package', 'Amount', 'Washer', 'Date', 'Payment Method', 'Sync Status']];
+        allRecords.forEach(r => {
+          const syncStatus = pendingRecords.some(pr => pr.id === r.id) ? 'Pending' : 'Synced';
+          const cells = [
+            r.licensePlate || '',
+            r.customerName || '',
+            r.package || '',
+            r.finalPrice || 0,
+            r.employee || '',
+            new Date(r.timestamp).toLocaleString(),
+            r.paymentMethod || '',
+            syncStatus
+          ].map(cell => `"${cell}"`);
+          rows.push(cells);
+        });
+        
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); 
+        a.href = url; 
+        a.download = 'carwash_report.csv'; 
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'Export CSV');
+    }
+    
+    // Package and employee functions with error handling
+    function populatePackageOptions() {
+      safeExecute(() => {
+        const container = document.getElementById('packageOptions');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        Object.entries(washPackages).forEach(([key, pkg]) => {
+          const div = document.createElement('div');
+          div.className = 'package-option';
+          div.innerHTML = `<strong>${pkg.name}</strong><div class="note">KSH ${pkg.price} • ${pkg.points} pts</div>`;
+          div.onclick = () => selectPackage(key, pkg, div);
+          container.appendChild(div);
+        });
+      }, 'Populate Package Options');
+    }
+    
+    function selectPackage(key, pkg, el) {
+      safeExecute(() => {
+        document.querySelectorAll('.package-option').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+        currentWash.packageKey = key;
+        currentWash.package = pkg.name;
+        currentWash.price = pkg.price;
+        
+        const nameElement = document.getElementById('employeePackageName');
+        const priceElement = document.getElementById('employeePackagePrice');
+        if (nameElement) nameElement.textContent = pkg.name;
+        if (priceElement) priceElement.textContent = 'KSH ' + pkg.price;
+        
+        populateEmployees();
+        showScreen('employeeScreen');
+      }, 'Select Package');
+    }
+    
+    function populateEmployees() {
+      safeExecute(() => {
+        const container = document.getElementById('employeeOptions');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        employees.forEach(emp => {
+          const div = document.createElement('div');
+          div.className = 'employee-option';
+          div.textContent = emp;
+          div.onclick = () => selectEmployee(emp, div);
+          container.appendChild(div);
+        });
+      }, 'Populate Employees');
+    }
+    
+    function selectEmployee(emp, el) {
+      safeExecute(() => {
+        document.querySelectorAll('.employee-option').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+        currentWash.employee = emp;
+        
+        const elements = {
+          summaryPlate: document.getElementById('summaryPlate'),
+          summaryPackage: document.getElementById('summaryPackage'),
+          summaryWasher: document.getElementById('summaryWasher'),
+          summaryAmount: document.getElementById('summaryAmount')
+        };
+        
+        if (elements.summaryPlate) elements.summaryPlate.textContent = currentWash.licensePlate || '';
+        if (elements.summaryPackage) elements.summaryPackage.textContent = currentWash.package || '';
+        if (elements.summaryWasher) elements.summaryWasher.textContent = currentWash.employee || '';
+        if (elements.summaryAmount) elements.summaryAmount.textContent = 'KSH ' + (currentWash.price || 0);
+        
+        showScreen('paymentScreen');
+      }, 'Select Employee');
+    }
+    
+    function processPayment(method) {
+      safeExecute(() => {
+        const washRecords = JSON.parse(localStorage.getItem('washRecords') || '[]');
+        const record = {
+          id: Date.now(),
+          licensePlate: currentWash.licensePlate || '',
+          customerName: currentWash.customerName || '',
+          package: currentWash.package || '',
+          finalPrice: currentWash.price || 0,
+          employee: currentWash.employee || '',
+          paymentMethod: method,
+          timestamp: new Date().toISOString(),
+          status: 'completed'
+        };
+        
+        // Always save to local storage
+        washRecords.push(record);
+        localStorage.setItem('washRecords', JSON.stringify(washRecords));
+        
+        // If offline, add to pending sync
+        if (!isOnline) {
+          addToPendingSync(record);
+        } else {
+          // If online, try to sync immediately
+          addToPendingSync(record);
+          syncPendingRecords();
+        }
+        
+        // Update receipt
+        const receiptElements = {
+          receiptId: document.getElementById('receiptId'),
+          receiptPlate: document.getElementById('receiptPlate'),
+          receiptCustomer: document.getElementById('receiptCustomer'),
+          receiptPackage: document.getElementById('receiptPackage'),
+          receiptAmount: document.getElementById('receiptAmount'),
+          receiptWasher: document.getElementById('receiptWasher'),
+          receiptPaymentMethod: document.getElementById('receiptPaymentMethod'),
+          receiptDate: document.getElementById('receiptDate')
+        };
+        
+        if (receiptElements.receiptId) receiptElements.receiptId.textContent = record.id;
+        if (receiptElements.receiptPlate) receiptElements.receiptPlate.textContent = record.licensePlate;
+        if (receiptElements.receiptCustomer) receiptElements.receiptCustomer.textContent = record.customerName;
+        if (receiptElements.receiptPackage) receiptElements.receiptPackage.textContent = record.package;
+        if (receiptElements.receiptAmount) receiptElements.receiptAmount.textContent = 'KSH ' + record.finalPrice;
+        if (receiptElements.receiptWasher) receiptElements.receiptWasher.textContent = record.employee;
+        if (receiptElements.receiptPaymentMethod) receiptElements.receiptPaymentMethod.textContent = record.paymentMethod;
+        if (receiptElements.receiptDate) receiptElements.receiptDate.textContent = new Date(record.timestamp).toLocaleString();
+        
+        showScreen('completionScreen');
+      }, 'Process Payment');
+    }
+    
+    function prepareReportFilters() {
+      safeExecute(() => {
+        const washRecords = JSON.parse(localStorage.getItem('washRecords') || '[]');
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        const allRecords = [...washRecords, ...pendingRecords];
+        
+        // Set default dates to today
+        const today = new Date().toISOString().split('T')[0];
+        const startElement = document.getElementById('reportStart');
+        const endElement = document.getElementById('reportEnd');
+        if (startElement) startElement.value = today;
+        if (endElement) endElement.value = today;
+        
+        // Populate washers
+        const washerSelect = document.getElementById('reportWasher');
+        if (washerSelect) {
+          washerSelect.innerHTML = '<option value="">All</option>';
+          const washers = [...new Set(allRecords.map(r => r.employee).filter(Boolean))];
+          washers.forEach(w => {
+            const option = document.createElement('option');
+            option.value = w;
+            option.textContent = w;
+            washerSelect.appendChild(option);
+          });
+        }
+        
+        // Populate packages
+        const packageSelect = document.getElementById('reportPackage');
+        if (packageSelect) {
+          packageSelect.innerHTML = '<option value="">All</option>';
+          const packages = [...new Set(allRecords.map(r => r.package).filter(Boolean))];
+          packages.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p;
+            option.textContent = p;
+            packageSelect.appendChild(option);
+          });
+        }
+        
+        generateReport();
+      }, 'Prepare Report Filters');
+    }
+    
+    function updateDashboard() {
+      safeExecute(() => {
+        const washRecords = JSON.parse(localStorage.getItem('washRecords') || '[]');
+        const pendingRecords = JSON.parse(localStorage.getItem('pendingSyncRecords') || '[]');
+        const allRecords = [...washRecords, ...pendingRecords];
+        
+        const today = new Date().toISOString().split('T')[0];
+        const todayRecords = allRecords.filter(r => r.status === 'completed' && r.timestamp && r.timestamp.startsWith(today));
+        
+        const todayWashes = todayRecords.length;
+        const todayRevenue = todayRecords.reduce((sum, r) => sum + (r.finalPrice || 0), 0);
+        const todayCustomers = new Set(todayRecords.map(r => r.licensePlate).filter(Boolean)).size;
+        
+        // Fixed the NaN issue by checking for division by zero
+        const todayAvg = todayWashes > 0 ? Math.round(todayRevenue / todayWashes) : 0;
+        
+        const dashboardElements = {
+          todayWashes: document.getElementById('todayWashes'),
+          todayRevenue: document.getElementById('todayRevenue'),
+          todayCustomers: document.getElementById('todayCustomers'),
+          todayAvg: document.getElementById('todayAvg')
+        };
+        
+        if (dashboardElements.todayWashes) dashboardElements.todayWashes.textContent = todayWashes;
+        if (dashboardElements.todayRevenue) dashboardElements.todayRevenue.textContent = 'KSH ' + todayRevenue;
+        if (dashboardElements.todayCustomers) dashboardElements.todayCustomers.textContent = todayCustomers;
+        if (dashboardElements.todayAvg) dashboardElements.todayAvg.textContent = 'KSH ' + todayAvg;
+      }, 'Update Dashboard');
+    }
+    
+    function updateUserDisplay() {
+      safeExecute(() => {
+        const display = document.getElementById('currentUserDisplay');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        
+        if (display && usernameDisplay) {
+          if (currentUser) {
+            display.style.display = 'block';
+            usernameDisplay.textContent = currentUser;
+          } else {
+            display.style.display = 'none';
+          }
+        }
+      }, 'Update User Display');
+    }
+    
+    // Initialize the app with comprehensive error handling
+    document.addEventListener('DOMContentLoaded', function() {
+      safeExecute(() => {
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser && users[savedUser]) {
+          currentUser = savedUser;
+          updateUserDisplay();
+          showScreen('dashboardScreen');
+        }
+        
+        // Set up login form
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+          loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            safeExecute(() => {
+              const username = document.getElementById('username')?.value || '';
+              const password = document.getElementById('password')?.value || '';
+              const errorElement = document.getElementById('loginError');
+              
+              if (users[username] && users[username].password === password) {
+                currentUser = username;
+                localStorage.setItem('currentUser', username);
+                updateUserDisplay();
+                showScreen('dashboardScreen');
+                if (errorElement) errorElement.textContent = '';
+              } else {
+                if (errorElement) errorElement.textContent = 'Invalid username or password';
+              }
+            }, 'Login Form Submit');
+          });
+        }
+        
+        // Set up registration form
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) {
+          registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            safeExecute(() => {
+              currentWash.licensePlate = document.getElementById('licensePlate')?.value || '';
+              currentWash.customerName = document.getElementById('customerName')?.value || '';
+              currentWash.vehicleType = document.getElementById('vehicleType')?.value || '';
+              currentWash.phoneNumber = document.getElementById('phoneNumber')?.value || '';
+              
+              const elements = {
+                packageVehiclePlate: document.getElementById('packageVehiclePlate'),
+                packageVehicleType: document.getElementById('packageVehicleType'),
+                packageCustomerName: document.getElementById('packageCustomerName')
+              };
+              
+              if (elements.packageVehiclePlate) elements.packageVehiclePlate.textContent = currentWash.licensePlate;
+              if (elements.packageVehicleType) elements.packageVehicleType.textContent = currentWash.vehicleType;
+              if (elements.packageCustomerName) elements.packageCustomerName.textContent = currentWash.customerName || 'Not provided';
+              
+              showScreen('packageScreen');
+            }, 'Registration Form Submit');
+          });
+        }
+        
+        // Initialize dashboard
+        updateDashboard();
+      }, 'DOM Content Loaded');
+    });
+
+    // Global error handlers
+    window.addEventListener('error', (e) => {
+      console.error('Global error:', e.error);
+      showErrorNotice('An unexpected error occurred');
+      e.preventDefault();
+    });
+
+    window.addEventListener('unhandledrejection', (e) => {
+      console.error('Unhandled promise rejection:', e.reason);
+      showErrorNotice('A background operation failed');
+      e.preventDefault();
+    });
+  </script>
+</body>
+</html
